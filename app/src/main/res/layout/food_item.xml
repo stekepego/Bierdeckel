@@ -41,6 +41,7 @@
         android:layout_marginLeft="5dp">
 
     <Button
+        android:id="@+id/decrementBtn"
         android:layout_width="15dp"
         android:layout_height="wrap_content"
         android:text="-"
@@ -57,6 +58,7 @@
         android:textSize="20dp"
         android:layout_weight="1"/>
     <Button
+        android:id="@+id/incrementBtn"
         android:layout_width="15dp"
         android:layout_height="wrap_content"
         android:text="+"

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,7 +31,7 @@ public class FoodItemAdapter extends ArrayAdapter<Food>{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View row = convertView;
         FoodHolder holder;
 
@@ -55,6 +56,30 @@ public class FoodItemAdapter extends ArrayAdapter<Food>{
         holder.foodName.setText(food.foodName);
         holder.foodPrice.setText(String.format("%.2f", food.price) + "€");
         holder.foodCount.setText(Integer.toString(food.count));
+
+        Button decrementBtn = (Button)row.findViewById(R.id.decrementBtn);
+        Button incrementBtn = (Button)row.findViewById(R.id.incrementBtn);
+
+        decrementBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(data.get(position).count > 0) {
+                    data.get(position).count--;
+                }
+                notifyDataSetChanged();
+                MainActivity mainActivity = (MainActivity)context;
+                mainActivity.refreshPriceSumView();
+            }
+        });
+        incrementBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                data.get(position).count++;
+                notifyDataSetChanged();
+                MainActivity mainActivity = (MainActivity)context;
+                mainActivity.refreshPriceSumView();
+            }
+        });
 
         return row;
     }

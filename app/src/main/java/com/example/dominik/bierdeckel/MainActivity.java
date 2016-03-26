@@ -145,10 +145,10 @@ public class MainActivity extends AppCompatActivity {
         Food bier = new Food("Bier", 2.2f, "", 0);
         foodList.add(bier);
 
-        Food schinken = new Food("Schinken", 1.03f, "", 0);
+        Food schinken = new Food("Schinken", 1.03f, "", 1);
         foodList.add(schinken);
 
-        Food kase = new Food("Käse", 3.55f, "", 0);
+        Food kase = new Food("Käse", 3.55f, "", 2);
         foodList.add(kase);
 
         return foodList;
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i < foodList.size(); i++)
         {
-            priceSum += foodList.get(i).price;
+            priceSum += foodList.get(i).price * foodList.get(i).count;
         }
 
         return priceSum;
