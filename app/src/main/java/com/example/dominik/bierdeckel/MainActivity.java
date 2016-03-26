@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public List<Food> foodMenu;
+    private ListView listView1;
+    private FoodItemAdapter foodAdapter;
+    float priceSum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        foodMenu = new ArrayList<Food>();
+        foodMenu = initFoodList();
+
+        foodAdapter = new FoodItemAdapter(this, R.layout.food_item, foodMenu);
+
+        listView1 = (ListView)findViewById(R.id.foodView);
+        listView1.setAdapter(foodAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -36,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        foodMenu = new ArrayList<Food>();
+        this.refreshPriceSumView();
     }
 
     @Override
@@ -110,12 +123,8 @@ public class MainActivity extends AppCompatActivity {
                 Food food = new Food(foodName, price, description, count);
 
                 foodMenu.add(food);
-                for (int i = 0; i < foodMenu.size(); i++) {
-                    System.out.println(foodMenu.get(i).foodName);
-                    System.out.println(foodMenu.get(i).description);
-                    System.out.println(foodMenu.get(i).price);
-                    System.out.println(foodMenu.get(i).count);
-                }
+                foodAdapter.notifyDataSetChanged();
+                refreshPriceSumView();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -127,5 +136,41 @@ public class MainActivity extends AppCompatActivity {
 
         builder.show();
 
+    }
+
+    public List<Food> initFoodList()
+    {
+        List<Food> foodList = new ArrayList<>();
+
+        Food bier = new Food("Bier", 2.2f, "", 0);
+        foodList.add(bier);
+
+        Food schinken = new Food("Schinken", 1.03f, "", 0);
+        foodList.add(schinken);
+
+        Food kase = new Food("Käse", 3.55f, "", 0);
+        foodList.add(kase);
+
+        return foodList;
+    }
+
+    public void refreshPriceSumView()
+    {
+        TextView priceSumView = (TextView) findViewById(R.id.priceSum);
+        priceSum = getPriceSum(foodMenu);
+        String priceSumText = " = " + String.format("%.2f", priceSum) + "€";
+        priceSumView.setText(priceSumText);
+    }
+
+    public float getPriceSum(List<Food> foodList)
+    {
+        priceSum = 0.0f;
+
+        for (int i = 0; i < foodList.size(); i++)
+        {
+            priceSum += foodList.get(i).price;
+        }
+
+        return priceSum;
     }
 }
